@@ -6,7 +6,7 @@ from pyrogram.errors import MessageDeleteForbidden, RPCError
 from pyrogram.types import Message
 
 from Devine import app
-from Devine.utils.can_restrict import can_restrict
+from utils.can_restrict import can_restrict
 
 
 @app.on_message(filters.command("purge"))
