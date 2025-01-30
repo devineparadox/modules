@@ -28,7 +28,7 @@ from pyrogram.types import InlineKeyboardMarkup
 from pyrogram.types import InlineKeyboardMarkup as IKM
 from pyrogram.types import Message
 
-from config import LOG as DATA_LOG, 
+from config import LOG as DATA_LOG
 from Devine import app
 from Devine.server import server
 
