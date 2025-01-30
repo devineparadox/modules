@@ -1,6 +1,9 @@
 apscheduler
 bing-image-urls
 gTTS
+tgcrypto
+aiohttp
+pyjokes
 googlesearch-python
 httpx[http2]
 pyfiglet
