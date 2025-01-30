@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from Devine import app as pbot, app
-from Devine.utils.fonts import Fonts
+from utils.fonts import Fonts
 
 
 @app.on_message(filters.command(["font", "fonts"]))
