@@ -4,7 +4,7 @@ import pyrogram
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from Devin import app
+from Devine import app
 
 
 
