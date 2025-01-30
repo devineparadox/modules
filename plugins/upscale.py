@@ -1,39 +1,50 @@
-from os import remove
-from pyrogram import filters
 from lexica import Client as LexicaClient
-from pyrogram.errors.exceptions.bad_request_400 import PhotoInvalidDimensions
+from pyrogram import filters
+from pyrogram.types import Message
+import os
 from Devine import app
-from utils.error import capture_err
 
-lexica_client = LexicaClient()
-
-def upscale_image(image: bytes) -> bytes:
-    return lexica_client.upscale(image)
-
-@app.on_message(filters.command("upscale"))
-@capture_err
-async def upscale_reply_image(client, message):
-    if not message.reply_to_message or not message.reply_to_message.photo:
-        return await message.reply_text("ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴘʜᴏᴛᴏ ᴛᴏ ᴜᴘsᴄᴀʟᴇ ɪᴛ....")
+async def getFile(message: Message):
+    if not message.reply_to_message:
+        return None
     if message.reply_to_message.photo:
-        a = await message.reply_text("ᴡᴀɪᴛ ᴀ ᴍᴏᴍᴇɴᴛ......")
-        photo = await client.download_media(message.reply_to_message.photo.file_id)
+        image = await message.reply_to_message.download()
+        return image
+    elif message.reply_to_message.document and message.reply_to_message.document.mime_type in ['image/png', 'image/jpg', 'image/jpeg']:
+        image = await message.reply_to_message.download()
+        return image
+    else:
+        return None
 
-        with open(photo, 'rb') as f:
-            image_bytes = f.read()
-        try:
-            upscaled_image_bytes = upscale_image(image_bytes)
-            await a.edit("ᴀʟᴍᴏsᴛ ᴅᴏɴᴇ......")
-            with open('upscaled.png', 'wb') as f:
-                f.write(upscaled_image_bytes)
-                try:
-                    await message.reply_photo(photo='upscaled.png')
-                    remove('upscaled.png')
-                    await a.delete()
-                except PhotoInvalidDimensions:
-                    await message.reply_document('upscaled.png')
-                    remove('upscaled.png')
-                    await a.delete()
-        except Exception as e:
-            remove('upscaled.png')
-            await a.edit(e)
+async def UpscaleImages(image: bytes) -> str:
+    try:
+        client = LexicaClient()
+        content = client.upscale(image)
+        
+        upscaled_file_path = "upscaled.png"
+        with open(upscaled_file_path, "wb") as output_file:
+            output_file.write(content)
+        
+        return upscaled_file_path
+    except Exception as e:
+        raise Exception(f"Failed to upscale the image: {e}")
+    
+@app.on_message(filters.command("upscale"))
+async def upscaleImages(_, message):
+    file = await getFile(message)
+    if file is None:
+        return await message.reply_text("ʀᴇᴘʟʏ ᴛᴏ ᴀɴ ɪᴍᴀɢᴇ.")
+    
+    msg = await message.reply("ᴜᴘsᴄᴀʟɪɴɢ...")
+
+    with open(file, "rb") as f:
+        imageBytes = f.read()
+    os.remove(file)
+    
+    try:
+        upscaledImage = await UpscaleImages(imageBytes)
+        await message.reply_document(open(upscaledImage, "rb"))
+        await msg.delete()
+        os.remove(upscaledImage)
+    except Exception as e:
+        await msg.edit(f"Failed to upscale the image: {e}")
