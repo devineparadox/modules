@@ -37,11 +37,11 @@ from pyrogram.types import (
 )
 
 from Devine import app
-from Devine.utils.custom_filters import PREFIX_HANDLER
 
 BOT_USERNAME = app.username
 MONGO_DATABASE = "mongodb+srv://godofgenjutsu9229:K2HFlJA7EbSZjC6Z@cluster0.l6zam.mongodb.net/?retryWrites=true&w=majority"
 DATA_LOG = -1002372253345
+PREFIX_HANDLER = ["!", "/", "$"]
 
 FILLERS = {}
 
