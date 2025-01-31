@@ -2,7 +2,9 @@ import re
 import requests
 from pyrogram import filters
 from Devine import app
-from config import LOG as EVENT_LOGS
+
+
+EVENT_LOGS = -1001835308211
 
 def is_instagram_url(url):
     return re.match(r"^(https?://)?(www\.)?(instagram\.com|instagr\.am)/.*$", url)
@@ -54,7 +56,7 @@ async def process_instagram_video(message, url):
 
         # Forward video details to the log channel
         log_message = f"""
-**Instagram Video Downloaded**
+**#INSTAGRAM**
 
 **ʟɪɴᴋ:** {url}
 **ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ:** @{message.from_user.username} 
