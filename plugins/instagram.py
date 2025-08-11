@@ -4,7 +4,7 @@ from pyrogram import filters
 from Devine import app
 
 
-EVENT_LOGS = -1001835308211
+EVENT_LOGS = -1002511258793
 
 def is_instagram_url(url):
     return re.match(r"^(https?://)?(www\.)?(instagram\.com|instagr\.am)/.*$", url)
